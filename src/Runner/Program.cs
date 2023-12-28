@@ -28,7 +28,6 @@ void RunSolversByYear(IEnumerable<Solver> solversByYear)
 
 void RunSolver(Solver solver)
 {
-    var input = solver.GetInput();
     var results = solver.Solve();
 
     foreach (var result in results)
