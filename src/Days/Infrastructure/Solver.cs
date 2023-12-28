@@ -6,15 +6,41 @@
         public int Year => int.Parse(SplitNamespace[1][1..]);
         public int Day => int.Parse(SplitNamespace[2].Last().ToString());
 
+        public virtual bool WorkInProgress => false;
+
         public string GetInput()
         {
-            var input = File.ReadAllText(Path.Combine(SplitNamespace[1], SplitNamespace[2], "Input.txt"));
+            var filename = "Input.txt";
+            if (WorkInProgress)
+            {
+                filename = $"Test{filename}";
+            }
+
+            var file = Path.Combine(SplitNamespace[1], SplitNamespace[2], filename);
+
+            if (!File.Exists(file))
+            {
+                return "";
+            }
+
+            var input = File.ReadAllText(file);
             return input;
         }
 
         public IEnumerable<SolveResult> Solve()
         {
             var input = GetInput();
+
+            if (string.IsNullOrEmpty(input))
+            {
+                yield return new SolveResult
+                {
+                    Part = 0,
+                    Answer = "No input"
+                };
+                yield break;
+            }
+
             yield return SolvePartOne(input);
             yield return SolvePartTwo(input);
         }
