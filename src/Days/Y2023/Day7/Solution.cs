@@ -23,19 +23,15 @@ namespace AdventOfCode.Y2023.Day7
             { "A", 14 }
         };
 
-        public override SolveResult SolvePartOne(string input)
+        public override string SolvePartOne(string input)
         {
             var hands = Parse(input);
             var totalWinnings = CalculateWinnings(hands);
 
-            return new SolveResult
-            {
-                Part = 1,
-                Answer = totalWinnings.ToString()
-            };
+            return totalWinnings.ToString();
         }
 
-        public override SolveResult SolvePartTwo(string input)
+        public override string SolvePartTwo(string input)
         {
             var hands = Parse(input).ToList();
             foreach ( var hand in hands)
@@ -70,11 +66,7 @@ namespace AdventOfCode.Y2023.Day7
 
             var totalWinnings = CalculateWinnings(hands);
 
-            return new SolveResult
-            {
-                Part = 2,
-                Answer = totalWinnings.ToString()
-            };
+            return totalWinnings.ToString();
         }
 
         private IEnumerable<Hand> Parse(string input)

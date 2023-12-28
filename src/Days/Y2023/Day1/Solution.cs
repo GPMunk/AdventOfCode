@@ -7,26 +7,18 @@ namespace AdventOfCode.Y2023.Day1
         IParser<Calibration> Parser = new CalibrationParser();
         public IEnumerable<Calibration> Calibrations { get; set; }
 
-        public override SolveResult SolvePartOne(string input)
+        public override string SolvePartOne(string input)
         {
             var calibrations = GetCalibrations(input);
             var value = calibrations.Sum(x => x.Value);
-            return new SolveResult
-            {
-                Part = 1,
-                Answer = value.ToString()
-            };
+            return value.ToString();
         }
 
-        public override SolveResult SolvePartTwo(string input)
+        public override string SolvePartTwo(string input)
         {
             var calibrations = GetCalibrations(input);
             var value = calibrations.Sum(x => x.SpelledValue);
-            return new SolveResult
-            {
-                Part = 2,
-                Answer = value.ToString()
-            };
+            return value.ToString();
         }
 
         private IEnumerable<Calibration> GetCalibrations(string input)

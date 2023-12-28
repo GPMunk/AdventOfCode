@@ -5,29 +5,21 @@ namespace AdventOfCode.Y2023.Day3
 {
     public class Solution : Solver
     {
-        public override SolveResult SolvePartOne(string input)
+        public override string SolvePartOne(string input)
         {
             var schematic = SchematicParser.Parse(input);
             var partNrs = GetPartNumbersAdjacentToSymbol(schematic);
             var sum = partNrs.Sum();
 
-            return new SolveResult
-            {
-                Part = 1,
-                Answer = sum.ToString()
-            };
+            return sum.ToString();
         }
 
-        public override SolveResult SolvePartTwo(string input)
+        public override string SolvePartTwo(string input)
         {
             var schematic = SchematicParser.Parse(input);
             var gearRatioSum = GetGearRatioSum(schematic);
 
-            return new SolveResult
-            {
-                Part = 1,
-                Answer = gearRatioSum.ToString()
-            };
+            return gearRatioSum.ToString();
         }
 
         public List<int> GetPartNumbersAdjacentToSymbol(Schematic schematic)

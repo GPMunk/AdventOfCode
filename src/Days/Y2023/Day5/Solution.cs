@@ -19,7 +19,7 @@ namespace AdventOfCode.Y2023.Day5
 
         IEnumerable<Dictionary<Range, Range>> GetMaps(string[] blocks) => blocks.Skip(1).Select(FarmParser.ParseMap);
 
-        public override SolveResult SolvePartOne(string input)
+        public override string SolvePartOne(string input)
         {
             var blocks = input.Split("\r\n\r\n", StringSplitOptions.RemoveEmptyEntries);
             var seeds = GetSeeds(blocks);
@@ -27,14 +27,10 @@ namespace AdventOfCode.Y2023.Day5
 
             var lowestNumber = maps.Aggregate(seeds, Project).Min(x => x.Start);
 
-            return new SolveResult
-            {
-                Part = 1,
-                Answer = lowestNumber.ToString()
-            };
+            return lowestNumber.ToString();
         }
 
-        public override SolveResult SolvePartTwo(string input)
+        public override string SolvePartTwo(string input)
         {
             var blocks = input.Split("\r\n\r\n", StringSplitOptions.RemoveEmptyEntries);
             var seeds = GetRangeSeeds(blocks);
@@ -42,11 +38,7 @@ namespace AdventOfCode.Y2023.Day5
 
             var lowestNumber = maps.Aggregate(seeds, Project).Min(x => x.Start);
 
-            return new SolveResult
-            {
-                Part = 2,
-                Answer = lowestNumber.ToString()
-            };
+            return lowestNumber.ToString();
         }
 
         public IEnumerable<Range> Project(IEnumerable<Range> inputRanges, Dictionary<Range, Range> map)
