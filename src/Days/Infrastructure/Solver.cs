@@ -1,10 +1,12 @@
-﻿namespace AdventOfCode.Infrastructure
+﻿using System.Text.RegularExpressions;
+
+namespace AdventOfCode.Infrastructure
 {
     public abstract class Solver
     {
         private string[] SplitNamespace => GetType().Namespace!.Split(".");
-        public int Year => int.Parse(SplitNamespace[1][1..]);
-        public int Day => int.Parse(SplitNamespace[2].Last().ToString());
+        public int Year => int.Parse(Regex.Match(SplitNamespace[1], "\\d+").Value);
+        public int Day => int.Parse(Regex.Match(SplitNamespace[2], "\\d+").Value);
 
         public virtual bool WorkInProgress => false;
 
@@ -31,21 +33,36 @@
         {
             var input = GetInput();
 
-            if (string.IsNullOrEmpty(input))
-            {
-                yield return new SolveResult
-                {
-                    Part = 0,
-                    Answer = "No input"
-                };
-                yield break;
-            }
-
-            yield return SolvePartOne(input);
-            yield return SolvePartTwo(input);
+            yield return SolvePartShell(1, SolvePartOne, input);
+            yield return SolvePartShell(2, SolvePartTwo, input);
         }
 
-        public abstract SolveResult SolvePartOne(string input);
-        public abstract SolveResult SolvePartTwo(string input);
+        private SolveResult SolvePartShell(int part, Func<string, string> solvePart, string input)
+        {
+            var result = new SolveResult
+            {
+                Part = part
+            };
+
+            if (string.IsNullOrEmpty(input))
+            {
+                result.Answer = "No input";
+                return result;
+            }
+
+            try
+            {
+                result.Answer = solvePart(input);
+                return result;
+            }
+            catch (NotImplementedException nie)
+            {
+                result.Answer = $"{nie.GetType()}: {nie.Message}";
+                return result;
+            }
+        }
+
+        public abstract string SolvePartOne(string input);
+        public abstract string SolvePartTwo(string input);
     }
 }

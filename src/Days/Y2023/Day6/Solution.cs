@@ -5,27 +5,19 @@ namespace AdventOfCode.Y2023.Day6
 {
     public class Solution : Solver
     {
-        public override SolveResult SolvePartOne(string input)
+        public override string SolvePartOne(string input)
         {
             var races = ParseInput(input);
             var margin = races.Aggregate(1L, (x, y) => x * y.NumberOfWays);
-            return new SolveResult
-            {
-                Part = 1,
-                Answer = margin.ToString()
-            };
+            return margin.ToString();
         }
 
-        public override SolveResult SolvePartTwo(string input)
+        public override string SolvePartTwo(string input)
         {
             var races = ParseInput(input, x => x.Replace(" ", "")).ToArray();
 
 
-            return new SolveResult
-            {
-                Part = 2,
-                Answer = races[0].NumberOfWays.ToString()
-            };
+            return races[0].NumberOfWays.ToString();
         }
 
         private IEnumerable<Race> ParseInput(string input)

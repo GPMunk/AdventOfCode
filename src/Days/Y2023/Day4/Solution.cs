@@ -4,19 +4,15 @@ namespace AdventOfCode.Y2023.Day4
 {
     public class Solution : Solver
     {
-        public override SolveResult SolvePartOne(string input)
+        public override string SolvePartOne(string input)
         {
             var cards = CardParser.Parse(input);
             var totalPoints = cards.Sum(x => x.Points);
 
-            return new SolveResult
-            {
-                Part = 1,
-                Answer = totalPoints.ToString()
-            };
+            return totalPoints.ToString();
         }
 
-        public override SolveResult SolvePartTwo(string input)
+        public override string SolvePartTwo(string input)
         {
             var cards = CardParser.Parse(input).ToArray();
 
@@ -31,11 +27,7 @@ namespace AdventOfCode.Y2023.Day4
                 }
             }
 
-            return new SolveResult
-            {
-                Part = 2,
-                Answer = counts.Sum().ToString()
-            };
+            return counts.Sum().ToString();
         }
     }
 }
