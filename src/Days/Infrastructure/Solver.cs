@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Text.Json;
+using System.Text.RegularExpressions;
+using System.Xml.Serialization;
 
 namespace AdventOfCode.Infrastructure
 {
@@ -10,15 +12,37 @@ namespace AdventOfCode.Infrastructure
 
         public virtual bool WorkInProgress => false;
 
+        public IEnumerable<SolveResult> Solve()
+        {
+            var input = GetInput();
+
+            yield return SolvePartShell(1, SolvePartOne, input);
+            yield return SolvePartShell(2, SolvePartTwo, input);
+        }
+
+        public IEnumerable<SolveTestResult> SolveTests()
+        {
+            var testInputs = GetTestInput();
+
+            foreach (var testInput in testInputs)
+            {
+                SolveTestResult testResult;
+                if (testInput.Part == 1)
+                {
+                    testResult = (SolveTestResult)SolvePartShell(1, SolvePartOne, testInput.SanitizedInput);
+                }
+                else
+                {
+                    testResult = (SolveTestResult)SolvePartShell(2, SolvePartTwo, testInput.SanitizedInput);
+                }
+                testResult.AnswerShouldBe = testInput.Answer;
+                yield return testResult;
+            }
+        }
+
         public string GetInput()
         {
-            var filename = "Input.txt";
-            if (WorkInProgress)
-            {
-                filename = $"Test{filename}";
-            }
-
-            var file = Path.Combine(SplitNamespace[1], SplitNamespace[2], filename);
+            var file = Path.Combine(SplitNamespace[1], SplitNamespace[2], "Input.txt");
 
             if (!File.Exists(file))
             {
@@ -29,12 +53,29 @@ namespace AdventOfCode.Infrastructure
             return input;
         }
 
-        public IEnumerable<SolveResult> Solve()
+        public IEnumerable<TestInput> GetTestInput()
         {
-            var input = GetInput();
+            var filename = Path.Combine(SplitNamespace[1], SplitNamespace[2], "TestInputXML.xml");
 
-            yield return SolvePartShell(1, SolvePartOne, input);
-            yield return SolvePartShell(2, SolvePartTwo, input);
+            if (!File.Exists(filename))
+            {
+                return Enumerable.Empty<TestInput>();
+            }
+
+            var serializer = new XmlSerializer(typeof(TestCases));
+
+            TestCases testCases;
+            using (Stream reader = new FileStream(filename, FileMode.Open))
+            {
+                testCases = (TestCases)serializer.Deserialize(reader);
+            }
+
+            if (!testCases.TestInputs.Any())
+            {
+                return Enumerable.Empty<TestInput>();
+            }
+
+            return testCases.TestInputs;
         }
 
         private SolveResult SolvePartShell(int part, Func<string, string> solvePart, string input)

@@ -28,8 +28,19 @@ void RunSolversByYear(IEnumerable<Solver> solversByYear)
 
 void RunSolver(Solver solver)
 {
-    var results = solver.Solve();
+    var testResults = solver.SolveTests();
+    if (testResults.Any())
+    {
+        Console.WriteLine($"Tests:");
+        foreach (var testResult in testResults)
+        {
+            Console.WriteLine($"Part {testResult.Part}: {testResult.Answer}, should be: {testResult.AnswerShouldBe}");
+        }
+        Console.WriteLine();
+        Console.WriteLine("Solutions:");
+    }
 
+    var results = solver.Solve();
     foreach (var result in results)
     {
         Console.WriteLine($"Part {result.Part}: {result.Answer}");
